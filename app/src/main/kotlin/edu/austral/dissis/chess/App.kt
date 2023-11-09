@@ -3,14 +3,19 @@
  */
 package edu.austral.dissis.chess
 
+import org.austral.game.chess.DefaultGameEngine
 import edu.austral.dissis.chess.gui.CachedImageResolver
 import edu.austral.dissis.chess.gui.DefaultImageResolver
 import edu.austral.dissis.chess.gui.GameView
-import edu.austral.dissis.chess.gui.SimpleGameEngine
 import javafx.application.Application
 import javafx.application.Application.launch
 import javafx.scene.Scene
 import javafx.stage.Stage
+import org.austral.game.checkers.CheckersGameEngine
+import org.austral.game.checkers2.CheckersGameEngine2
+import org.austral.game.checkers2.CheckersGameFactory
+import org.austral.game.chess.ChessGameFactory
+import org.austral.game.commons.CustomGameEngine
 
 
 fun main() {
@@ -18,7 +23,7 @@ fun main() {
 }
 
 class ChessGameApplication : Application() {
-    private val gameEngine = SimpleGameEngine()
+    private val gameEngine = CustomGameEngine(CheckersGameFactory());
     private val imageResolver = CachedImageResolver(DefaultImageResolver())
 
     companion object {
