@@ -12,10 +12,11 @@ public class ServerController implements ConnectionController {
     private final GameView gameView;
 
     public ServerController(GameEngine gameEngine, GameView gameView, ServerBuilder serverBuilder) {
-        this.server = buildServer(serverBuilder);
         this.gameEngine = gameEngine;
         this.gameView = gameView;
-
+        addStatesToGameView(new GameEventListenerImp(this));
+        this.server = buildServer(serverBuilder);
+        server.start();
     }
 
     public void start() {
@@ -47,14 +48,13 @@ public class ServerController implements ConnectionController {
         gameView.handleInitialState(initialState);
         server.broadcast(new Message<>("initialState", initialState));
     }
+
     private Server buildServer(ServerBuilder builder) {
-        GameEventListenerImp gameListener = new GameEventListenerImp(this);
-        addStatesToGameView(gameListener);
         return builder
                 .withPort(8080)
                 .withConnectionListener(new ServerConnectionListenerImp(this))
                 .addMessageListener("move", new TypeReference<>() {
-                }, new ServerMessageListener(gameListener))
+                }, new ServerMessageListener(new GameEventListenerImp(this)))
                 .build();
     }
 
