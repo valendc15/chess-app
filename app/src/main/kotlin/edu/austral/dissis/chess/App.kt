@@ -30,12 +30,20 @@ class ChessGameApplication : Application() {
         const val GameTitle = "Chess"
     }
 
+    override fun init() {
+        super.init()
+    }
+
     override fun start(primaryStage: Stage) {
         primaryStage.title = GameTitle
 
-        val root = GameView(gameEngine, imageResolver)
-        primaryStage.scene = Scene(root)
+        val root = GameView(imageResolver)
 
+        primaryStage.scene = Scene(root)
         primaryStage.show()
+    }
+
+    override fun stop() {
+        super.stop()
     }
 }
