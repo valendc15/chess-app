@@ -30,8 +30,8 @@ public class CustomGameEngine implements GameEngine {
     }
 
     private InitialState createInitialState() {
-        return new InitialState(Adapter.getBoardSize(game.getBoard()),
-                Adapter.getAllPieces(game.getBoard()),
-                Adapter.getCurrentTurn(game.getTurnManager()));
+        return new InitialState(Adapter.getBoardSize(previousGames.peek().getBoard()),
+                Adapter.getAllPieces(previousGames.peek().getBoard()),
+                Adapter.getCurrentTurn(previousGames.peek().getTurnManager()));
     }
 }

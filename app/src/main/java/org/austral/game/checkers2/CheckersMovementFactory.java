@@ -15,10 +15,11 @@ public class CheckersMovementFactory {
         MovementValidatorWithoutCollision checkersNormalMovementValidator = new MovementValidatorWithoutCollision(checkersDiagonalNormalMovement);
         MovementValidatorWithoutCollision checkersChainEatingMovementValidator = new MovementValidatorWithoutCollision(checkersChainEatingMovement);
         CannotEatValidator cannotEatValidator = new CannotEatValidator();
+        ForcedToEatValidator forcedToEatValidator = new ForcedToEatValidator();
         LastMovementWasEatValidator lastMovementWasEatValidator = new LastMovementWasEatValidator();
         LastMovementWasntEatValidator lastMovementWasntEatValidator = new LastMovementWasntEatValidator();
         CheckersEatingValidator checkersEatingValidator = new CheckersEatingValidator();
-        CompositeAndValidator normalMovement = new CompositeAndValidator(cannotEatValidator, lastMovementWasntEatValidator, checkersNormalMovementValidator);
+        CompositeAndValidator normalMovement = new CompositeAndValidator(forcedToEatValidator,cannotEatValidator, lastMovementWasntEatValidator, checkersNormalMovementValidator);
         CompositeAndValidator eatingMovement = new CompositeAndValidator(lastMovementWasntEatValidator, checkersEatingMovementValidator, checkersEatingValidator);
         CompositeAndValidator chainEatingMovement = new CompositeAndValidator(lastMovementWasEatValidator, checkersChainEatingMovementValidator, checkersEatingValidator);
         return new CompositeOrValidator(chainEatingMovement, eatingMovement, normalMovement);
@@ -32,10 +33,11 @@ public class CheckersMovementFactory {
         MovementValidatorWithoutCollision checkersNormalMovementValidator = new MovementValidatorWithoutCollision(checkersDiagonalNormalMovement);
         MovementValidatorWithoutCollision checkersChainEatingMovementValidator = new MovementValidatorWithoutCollision(checkersChainEatingMovement);
         CannotEatValidator cannotEatValidator = new CannotEatValidator();
+        ForcedToEatValidator forcedToEatValidator = new ForcedToEatValidator();
         CheckersEatingValidator checkersEatingValidator = new CheckersEatingValidator();
         LastMovementWasEatValidator lastMovementWasEatValidator = new LastMovementWasEatValidator();
         LastMovementWasntEatValidator lastMovementWasntEatValidator = new LastMovementWasntEatValidator();
-        CompositeAndValidator normalMovement = new CompositeAndValidator(cannotEatValidator, lastMovementWasntEatValidator, checkersNormalMovementValidator);
+        CompositeAndValidator normalMovement = new CompositeAndValidator(forcedToEatValidator,cannotEatValidator, lastMovementWasntEatValidator, checkersNormalMovementValidator);
         CompositeAndValidator eatingMovement = new CompositeAndValidator(lastMovementWasntEatValidator, checkersEatingMovementValidator, checkersEatingValidator);
         CompositeAndValidator chainEatingMovement = new CompositeAndValidator(lastMovementWasEatValidator, checkersChainEatingMovementValidator, checkersEatingValidator);
         return new CompositeOrValidator(chainEatingMovement, eatingMovement, normalMovement);
@@ -49,10 +51,11 @@ public class CheckersMovementFactory {
         MovementValidatorWithoutCollision checkersNormalMovementValidator = new MovementValidatorWithoutCollision(checkersDiagonalNormalMovement);
         MovementValidatorWithoutCollision checkersChainEatingMovementValidator = new MovementValidatorWithoutCollision(checkersChainEatingMovement);
         CannotEatValidator cannotEatValidator = new CannotEatValidator();
+        ForcedToEatValidator forcedToEatValidator = new ForcedToEatValidator();
         CheckersEatingValidator checkersEatingValidator = new CheckersEatingValidator();
         LastMovementWasEatValidator lastMovementWasEatValidator = new LastMovementWasEatValidator();
         LastMovementWasntEatValidator lastMovementWasntEatValidator = new LastMovementWasntEatValidator();
-        CompositeAndValidator normalMovement = new CompositeAndValidator(cannotEatValidator, lastMovementWasntEatValidator, checkersNormalMovementValidator);
+        CompositeAndValidator normalMovement = new CompositeAndValidator(forcedToEatValidator,cannotEatValidator, lastMovementWasntEatValidator, checkersNormalMovementValidator);
         CompositeAndValidator eatingMovement = new CompositeAndValidator(lastMovementWasntEatValidator, checkersEatingMovementValidator, checkersEatingValidator);
         CompositeAndValidator chainEatingMovement = new CompositeAndValidator(lastMovementWasEatValidator, checkersChainEatingMovementValidator, checkersEatingValidator);
         return new CompositeOrValidator(chainEatingMovement, eatingMovement, normalMovement);
