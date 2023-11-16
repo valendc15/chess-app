@@ -22,6 +22,7 @@ public class ChessMovementFactory {
         return pawnMovements;
     }
 
+
     public static CompositeOrValidator createBlackPawnMovements(){
         InitialMovementValidator initialMovementValidator=new InitialMovementValidator();
         EatingValidator eatingValidator=new EatingValidator();
@@ -68,7 +69,7 @@ public class ChessMovementFactory {
     public static CompositeOrValidator createKnightMovements(){
         EatingValidator eatingValidator=new EatingValidator();
         NotEatingValidator notEatingValidator=new NotEatingValidator();
-        LPathGenerator knightPathGenerator = new LPathGenerator();
+        LPathGenerator knightPathGenerator = new LPathGenerator(2,1,1,2);
         MovementValidatorWithCollision movementValidatorWithCollisionKnight=new MovementValidatorWithCollision(knightPathGenerator);
         CompositeAndValidator eatingMovementKnight=new CompositeAndValidator(movementValidatorWithCollisionKnight,eatingValidator);
         CompositeAndValidator notEatingMovementKnight=new CompositeAndValidator(movementValidatorWithCollisionKnight,notEatingValidator);

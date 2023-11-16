@@ -40,7 +40,7 @@ public class Tests{
     public void testKnightMovements(){
         Board board = new Board(8,8);
         CheckMate checkMate=new CheckMate();
-        LPathGenerator lPathGenerator = new LPathGenerator();
+        LPathGenerator lPathGenerator = new LPathGenerator(2, 1,1,2 );
         EatingValidator eatingValidator=new EatingValidator();
         NotEatingValidator notEatingValidator=new NotEatingValidator();
         HasPieceValidator hasPieceValidator=new HasPieceValidator();
