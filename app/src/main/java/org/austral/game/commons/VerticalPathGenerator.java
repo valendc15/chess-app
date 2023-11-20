@@ -1,10 +1,5 @@
 package org.austral.game.commons;
 
-import org.austral.game.commons.Movement;
-import org.austral.game.commons.PathGenerator;
-import org.austral.game.commons.PathResult;
-import org.austral.game.commons.Position;
-
 public class VerticalPathGenerator implements PathGenerator {
 
     int verticalLimit;
@@ -23,21 +18,30 @@ public class VerticalPathGenerator implements PathGenerator {
         int toX = movement.getTo().getPositionX();
         int toY = movement.getTo().getPositionY();
 
-        if (movement.isVerticalMovement()) {
-            int pathLength = Math.abs(toY - fromY);
+        if (!movement.isVerticalMovement()) {
+            return new PathResult(null);
+        }
 
-            if (verticalLimit == 0 || pathLength <= verticalLimit) {
-                if (toY > fromY && allowForward) {
-                    Position[] path = generateVerticalPath(fromX, fromY, toY);
-                    return new PathResult(path);
-                } else if (toY < fromY && allowBackward) {
-                    Position[] path = generateVerticalPath(fromX, fromY, toY);
-                    return new PathResult(path);
-                }
-            }
+        int pathLength = Math.abs(toY - fromY);
+
+        if (withinLimitAndAllowedDirection(pathLength, toY, fromY)) {
+            Position[] path = generateVerticalPath(fromX, fromY, toY);
+            return new PathResult(path);
         }
 
         return new PathResult(null);
+    }
+
+    private boolean withinLimitAndAllowedDirection(int pathlenght, int toY, int fromY) {
+        return isWithinVerticalLimit(pathlenght) && isAllowedDirection(toY, fromY);
+    }
+
+    private boolean isWithinVerticalLimit(int pathLength) {
+        return verticalLimit == 0 || pathLength <= verticalLimit;
+    }
+
+    private boolean isAllowedDirection(int toY, int fromY) {
+        return (toY > fromY && allowForward) || (toY < fromY && allowBackward);
     }
 
     private Position[] generateVerticalPath(int x, int fromY, int toY) {

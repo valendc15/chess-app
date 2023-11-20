@@ -20,17 +20,26 @@ public class LPathGenerator implements PathGenerator {
         int toX = movement.getTo().getPositionX();
         int toY = movement.getTo().getPositionY();
 
-        int deltaX = toX - fromX;
-        int deltaY = toY - fromY;
+        int deltaX = Math.abs(toX - fromX);
+        int deltaY = Math.abs(toY - fromY);
 
-        if ((Math.abs(deltaX) == xIncrement1 && Math.abs(deltaY) == yIncrement1) ||
-                (Math.abs(deltaX) == xIncrement2 && Math.abs(deltaY) == yIncrement2)) {
-            Position[] path = new Position[2];
-            path[0] = new Position(fromX, fromY);
-            path[1] = new Position(toX, toY);
+        if (isLPath(deltaX, deltaY)) {
+            Position[] path = createLPath(fromX, fromY, toX, toY);
             return new PathResult(path);
         }
 
         return new PathResult(null);
+    }
+
+    private boolean isLPath(int deltaX, int deltaY) {
+        return (deltaX == xIncrement1 && deltaY == yIncrement1) ||
+                (deltaX == xIncrement2 && deltaY == yIncrement2);
+    }
+
+    private Position[] createLPath(int fromX, int fromY, int toX, int toY) {
+        Position[] path = new Position[2];
+        path[0] = new Position(fromX, fromY);
+        path[1] = new Position(toX, toY);
+        return path;
     }
 }

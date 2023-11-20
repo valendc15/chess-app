@@ -21,12 +21,16 @@ public class Game implements org.austral.game.commons.Game {
         this.movementManager=new MovementManager(movementRules);
         this.board=initializeBoardWithPieces(pieces, board);
         this.winingRules=winingRules;
-        if(firstPlayerColor==Color.BLACK){
+        if(isFirstPlayerBlack(firstPlayerColor)){
             turnManager=new TurnManager(blackPlayer);
         }
         else{
             turnManager=new TurnManager(whitePlayer);
         }
+    }
+
+    private boolean isFirstPlayerBlack(Color firstPlayerColor){
+        return firstPlayerColor==Color.BLACK;
     }
 
     public Player getCurrentPlayer(){

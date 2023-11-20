@@ -111,45 +111,35 @@ public class Board {
 
         return true;
     }
-    public GetResult<Position, Boolean> findKingPosition(Color color){
-        for (int i = 0; i < squares.length; i++) {
-            if (squares[i].getPiece().getSuccesValue().isPresent()){
-                if (squares[i].getPiece().getSuccesValue().get().getColor() == color && squares[i].getPiece().getSuccesValue().get().isCheckable()){
-                    return new GetResult<>(Optional.of(squares[i].getPosition()), false);
-                }
+    public GetResult<Position, Boolean> findKingPosition(Color color) {
+        for (Square square : squares) {
+            Optional<Piece> piece = square.getPiece().getSuccesValue();
+            if (isPieceValidForKing(piece, color)) {
+                return new GetResult<>(Optional.of(square.getPosition()), false);
             }
         }
         return new GetResult<>(Optional.empty(), true);
     }
 
-    public boolean isCheck(Color color){
-        GetResult<Position, Boolean> kingPosition = findKingPosition(color);
-        if (kingPosition.getErrorValue()){
-            return false;
-        }
-        for (int i = 0; i < squares.length; i++) {
-            if (squares[i].getPiece().getSuccesValue().isPresent()){
-                if (squares[i].getPiece().getSuccesValue().get().getColor() != color){
-                    if (squares[i].getPiece().getSuccesValue().get().isLegalMove(new Movement(squares[i].getPosition(), kingPosition.getSuccesValue().get()), this, new Player(color))){
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+    private boolean isPieceValidForKing(Optional<Piece> piece, Color color) {
+        return piece.isPresent() && piece.get().getColor() == color && piece.get().isCheckable();
     }
 
-    public List<Piece> getPieces(Color color){
+    public List<Piece> getPieces(Color color) {
         List<Piece> pieces = new ArrayList<>();
-        for (int i = 0; i < squares.length; i++) {
-            if (squares[i].getPiece().getSuccesValue().isPresent()){
-                if (squares[i].getPiece().getSuccesValue().get().getColor() == color){
-                    pieces.add(squares[i].getPiece().getSuccesValue().get());
-                }
+        for (Square square : squares) {
+            Optional<Piece> piece = square.getPiece().getSuccesValue();
+            if (isPieceValidForColor(piece, color)) {
+                pieces.add(piece.get());
             }
         }
         return pieces;
     }
+
+    private boolean isPieceValidForColor(Optional<Piece> piece, Color color) {
+        return piece.isPresent() && piece.get().getColor() == color;
+    }
+
 
     public boolean hasPiece(Position position){
         return getSquares(position).hasPiece();
@@ -159,16 +149,20 @@ public class Board {
         return getSquares(position).getPiece();
     }
 
-    public GetResult<Position, Boolean> findPiece(Piece piece){
+    public GetResult<Position, Boolean> findPiece(Piece piece) {
         for (int i = 0; i < squares.length; i++) {
-            if (squares[i].getPiece().getSuccesValue().isPresent()){
-                if (squares[i].getPiece().getSuccesValue().get().equals(piece)){
-                    return new GetResult<>(Optional.of(squares[i].getPosition()), false);
-                }
+            Optional<Piece> squarePiece = squares[i].getPiece().getSuccesValue();
+            if (isPieceEqual(squarePiece, piece)) {
+                return new GetResult<>(Optional.of(squares[i].getPosition()), false);
             }
         }
         return new GetResult<>(Optional.empty(), true);
     }
+
+    private boolean isPieceEqual(Optional<Piece> squarePiece, Piece targetPiece) {
+        return squarePiece.isPresent() && squarePiece.get().equals(targetPiece);
+    }
+
 
     public Square[] getSquares() {
         return squares;

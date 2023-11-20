@@ -5,13 +5,13 @@ import org.austral.game.commons.*;
 
 public class HasEatenBeforeCheck implements Validator {
     public boolean validate(Movement movement, Board board, Player player) {
+
+        return hasPreviousMovementsAndLastMovementWasEating(movement, board, player);
+    }
+
+    private boolean hasPreviousMovementsAndLastMovementWasEating(Movement movement, Board board, Player player) {
         MovementHistory movementHistory = board.getMovementHistory();
-
-        if (hasPreviousMovements(movementHistory) && isLastMovementEating(movement, movementHistory, player)) {
-            return true;
-        }
-
-        return false;
+        return hasPreviousMovements(movementHistory) && isLastMovementEating(movement, movementHistory, player);
     }
 
     private boolean hasPreviousMovements(MovementHistory movementHistory) {

@@ -26,11 +26,15 @@ public class CanEatAgainValidator implements Validator {
         Movement[] possibleMovements = possibleMovesCalculator.calculatePossibleMoves(board, movement.getTo());
 
         for (Movement possibleMovement : possibleMovements) {
-            if (movementRules.validate(possibleMovement, board, player)) {
+            if (validateMovementRules(possibleMovement, board, player)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private boolean validateMovementRules(Movement movement, Board board, Player player){
+        return movementRules.validate(movement, board, player);
     }
 }

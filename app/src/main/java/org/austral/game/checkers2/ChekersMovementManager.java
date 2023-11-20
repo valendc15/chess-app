@@ -34,7 +34,7 @@ public class ChekersMovementManager {
     }
 
     private Board manageChainMovement(Player player, Board board, Movement movement) {
-        if (validateSamePieceasBefore(movement, board) && isValidMove(player, board, movement)) {
+        if (samePieceAsBeforeAndValidMove(player, board, movement)) {
             CheckersEatingValidator checkersEatingValidator = new CheckersEatingValidator();
             QueenEatingValidator queenEatingValidator = new QueenEatingValidator();
             if (checkersEatingValidator.validate(movement, board, player)) {
@@ -47,6 +47,10 @@ public class ChekersMovementManager {
         }
         board = PromotionManager.applyPromotion(board,CheckersMovementFactory.createQueenPieceMovements());
         return board;
+    }
+
+    private boolean samePieceAsBeforeAndValidMove(Player player, Board board, Movement movement) {
+        return validateSamePieceasBefore(movement, board) && isValidMove(player, board, movement);
     }
 
     private Board manageNonChainMovement(Player player, Board board, Movement movement) {
@@ -70,10 +74,14 @@ public class ChekersMovementManager {
         Movement lastMovement = board.getMovementHistory().getLastMovement();
         GetResult<Piece, Boolean> possiblePiece=board.getPiece(movement.getFrom());
         GetResult<Piece, Boolean> lastPiece=board.getPiece(lastMovement.getTo());
-        if (possiblePiece.getSuccesValue().isPresent() && lastPiece.getSuccesValue().isPresent()){
+        if (bothPiecesPresent(possiblePiece, lastPiece)){
             return possiblePiece.getSuccesValue().get().equals(lastPiece.getSuccesValue().get());
         }
         return false;
+    }
+
+    private boolean bothPiecesPresent(GetResult<Piece, Boolean> possiblePiece, GetResult<Piece, Boolean> lastPiece){
+        return possiblePiece.getSuccesValue().isPresent() && lastPiece.getSuccesValue().isPresent();
     }
 
 

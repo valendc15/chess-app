@@ -13,7 +13,7 @@ public class CastlingManager {
             }
 
             Board castlingResult = performCastling(board, movement);
-            if (!board.isCheck(player.getColor())) {
+            if (!CheckValidator.isCheck(castlingResult, player.getColor())) {
                 return castlingResult;
             }
         }
@@ -29,7 +29,7 @@ public class CastlingManager {
         Optional<Piece> kingOptional = board.getPiece(movement.getFrom()).getSuccesValue();
         Optional<Piece> rookOptional = board.getPiece(movement.getTo()).getSuccesValue();
 
-        if (kingOptional.isPresent() && rookOptional.isPresent()) {
+        if (kingAndRookArePresent(kingOptional, rookOptional)) {
 
             int direction = (movement.getFrom().getPositionX() < movement.getTo().getPositionX()) ? 1 : -1;
 
@@ -44,12 +44,16 @@ public class CastlingManager {
         return board;
     }
 
+    private static boolean kingAndRookArePresent(Optional<Piece> kingOptional, Optional<Piece> rookOptional) {
+        return kingOptional.isPresent() && rookOptional.isPresent();
+    }
+
 
     public static boolean isCastling(Movement movement, Board board, Player player) {
         Optional<Piece> fromPieceOptional = board.getPiece(movement.getFrom()).getSuccesValue();
         Optional<Piece> toPieceOptional = board.getPiece(movement.getTo()).getSuccesValue();
 
-        if (fromPieceOptional.isPresent() && toPieceOptional.isPresent()) {
+        if (kingAndRookArePresent(fromPieceOptional, toPieceOptional)) {
             Piece fromPiece = fromPieceOptional.get();
             Piece toPiece = toPieceOptional.get();
 

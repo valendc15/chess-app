@@ -25,7 +25,7 @@ public class QueenEatingValidator implements Validator {
     private boolean checkQueenEatingConditions(PathResult diagonalPath, Board board, Player player) {
         Position[] path = diagonalPath.getPath();
 
-        if (path.length < 3) {
+        if (atLeastThreePositions(path)) {
             return false; // At least three positions are required for eating (start, middle, end)
         }
 
@@ -34,6 +34,10 @@ public class QueenEatingValidator implements Validator {
         Position middle = path[path.length - 2];
 
         return isEnemyPiece(board, middle, player) && noPieceInBetween(board, path);
+    }
+
+    private boolean atLeastThreePositions(Position[] path) {
+        return path.length < 3;
     }
 
     private boolean isEnemyPiece(Board board, Position middle, Player player) {

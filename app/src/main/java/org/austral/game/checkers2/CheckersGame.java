@@ -57,7 +57,7 @@ public class CheckersGame implements Game {
     }
     public boolean isOver(){
         for (WinningRules rule : winingRules) {
-            if (rule.validateRule(board, whitePlayer) || rule.validateRule(board, blackPlayer)){
+            if (appliesToAllPlayers(rule)) {
                 isOver = true;
                 return true;
             }
@@ -65,15 +65,36 @@ public class CheckersGame implements Game {
         return false;
     }
 
+    private boolean appliesToAllPlayers(WinningRules rule){
+        return rule.validateRule(board, whitePlayer) || rule.validateRule(board, blackPlayer);
+    }
 
+
+    private boolean isWhiteAndCanEatAgain(Movement movement) {
+        CanEatAgainValidator canEatAgainValidator = new CanEatAgainValidator(movementManager.getMovementRules());
+        return isWhiteTurn() && canEatAgainValidator.validate(movement, movementManager.manageMovement(whitePlayer, board, movement), whitePlayer);
+    }
+
+    private boolean isBlackAndCanEatAgain(Movement movement) {
+        CanEatAgainValidator canEatAgainValidator = new CanEatAgainValidator(movementManager.getMovementRules());
+        return isBlackTurn() && canEatAgainValidator.validate(movement, movementManager.manageMovement(blackPlayer, board, movement), blackPlayer);
+    }
+
+    private boolean isBlackTurn() {
+        return turnManager.getCurrentPlayer().getColor() == Color.BLACK;
+    }
+
+    private boolean isWhiteTurn() {
+        return turnManager.getCurrentPlayer().getColor() == Color.WHITE;
+    }
     public CheckersGame move(Movement movement) {
         CanEatAgainValidator canEatAgainValidator = new CanEatAgainValidator(movementManager.getMovementRules());
         movementManager = movementManager.isChain() ? movementManager.withChain() : new ChekersMovementManager(movementManager.getMovementRules(), false);
-        if (turnManager.getCurrentPlayer().getColor() == Color.WHITE && canEatAgainValidator.validate(movement, movementManager.manageMovement(whitePlayer,board, movement), whitePlayer)) {
+        if (isWhiteAndCanEatAgain(movement)) {
             return new CheckersGame(movementManager.manageMovement(whitePlayer, board, movement), whitePlayer, blackPlayer, movementManager.getMovementRules(), winingRules, new TurnManager(whitePlayer));
-        } else if (turnManager.getCurrentPlayer().getColor() == Color.BLACK && canEatAgainValidator.validate(movement, movementManager.manageMovement(blackPlayer,board, movement), blackPlayer)) {
+        } else if (isBlackAndCanEatAgain(movement)) {
             return new CheckersGame(movementManager.manageMovement(blackPlayer, board, movement), whitePlayer, blackPlayer, movementManager.getMovementRules(), winingRules, new TurnManager(blackPlayer));
-        } else if (turnManager.getCurrentPlayer().getColor() == Color.WHITE) {
+        } else if (isWhiteTurn()) {
             return new CheckersGame(movementManager.manageMovement(whitePlayer, board, movement), whitePlayer, blackPlayer, movementManager.getMovementRules(), winingRules, new TurnManager(blackPlayer));
         } else {
             return new CheckersGame(movementManager.manageMovement(blackPlayer, board, movement), whitePlayer, blackPlayer, movementManager.getMovementRules(), winingRules, new TurnManager(whitePlayer));

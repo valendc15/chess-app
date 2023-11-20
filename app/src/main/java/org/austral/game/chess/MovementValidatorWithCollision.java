@@ -17,11 +17,16 @@ public class MovementValidatorWithCollision implements Validator {
 
     public boolean validate(Movement movement, Board board, Player player){
         PathResult pathResult= pathGenerator.generatePath(movement);
-        if(pathResult.pathExists() && board.isValidPath(pathResult.getPath())){
+        if(pathExistsAndIsValid(movement, board)){
             return board.checkIfPathIsEmpty(pathResult.getPath());
         }
         else
             return false;
+    }
+
+    private boolean pathExistsAndIsValid(Movement movement, Board board){
+        PathResult pathResult= pathGenerator.generatePath(movement);
+        return pathResult.pathExists() && board.isValidPath(pathResult.getPath());
     }
 
 }

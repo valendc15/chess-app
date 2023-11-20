@@ -18,23 +18,36 @@ public class DiagonalPathGenerator implements PathGenerator {
         int toX = movement.getTo().getPositionX();
         int toY = movement.getTo().getPositionY();
 
-        int deltaX = Math.abs(toX - fromX);
-        int deltaY = Math.abs(toY - fromY);
-
-        if (deltaX != deltaY) {
+        if (!isValidDiagonalMovement(fromX, fromY, toX, toY)) {
             return new PathResult(null); // Not a valid diagonal movement
         }
 
-        if (diagonalLimit == 0 || deltaX <= diagonalLimit) {
-            boolean isForward = (toY > fromY);
-            boolean isBackward = (toY < fromY);
-
-            if ((isForward && allowForward) || (isBackward && allowBackward)) {
-                return generateDiagonalPath(fromX, fromY, toX, toY);
-            }
+        if (isWithinLimitAndAllowedDirection(toX, fromX, toY, fromY)) {
+            return generateDiagonalPath(fromX, fromY, toX, toY);
         }
 
         return new PathResult(null); // Exceeds diagonal limit or not allowed direction
+    }
+
+    private boolean isWithinLimitAndAllowedDirection(int toX, int fromX, int toY, int fromY) {
+        return isWithinDiagonalLimit(toX, fromX) && isAllowedDirection(toY, fromY);
+    }
+
+    private boolean isValidDiagonalMovement(int fromX, int fromY, int toX, int toY) {
+        int deltaX = Math.abs(toX - fromX);
+        int deltaY = Math.abs(toY - fromY);
+        return deltaX == deltaY;
+    }
+
+    private boolean isWithinDiagonalLimit(int toX, int fromX) {
+        int deltaX = Math.abs(toX - fromX);
+        return diagonalLimit == 0 || deltaX <= diagonalLimit;
+    }
+
+    private boolean isAllowedDirection(int toY, int fromY) {
+        boolean isForward = toY > fromY;
+        boolean isBackward = toY < fromY;
+        return (isForward && allowForward) || (isBackward && allowBackward);
     }
 
     private PathResult generateDiagonalPath(int fromX, int fromY, int toX, int toY) {
@@ -52,3 +65,4 @@ public class DiagonalPathGenerator implements PathGenerator {
         return new PathResult(path);
     }
 }
+

@@ -17,7 +17,7 @@ public class CheckMate implements WinningRules {
     public boolean validateRule(Board board, Player player) {
         Color color = player.getColor();
         // If the king is not in check, it's not checkmate.
-        if (!board.isCheck(color)) {
+        if (CheckValidator.isCheck(board, color)) {
             return false;
         }
         GetResult<Position, Boolean> kingPositionResult = board.findKingPosition(color);
@@ -58,7 +58,7 @@ public class CheckMate implements WinningRules {
 
         for (Movement move : possibleMoves) {
             Board updatedBoard = board.movePiece(move);
-            if (!updatedBoard.isCheck(color)) {
+            if (!CheckValidator.isCheck(updatedBoard, color)) {
                 return true;
             }
         }

@@ -14,16 +14,22 @@ public class HorizontalPathGenerator implements PathGenerator {
         int toX = movement.getTo().getPositionX();
         int toY = movement.getTo().getPositionY();
 
-        if (movement.isHorizontalMovement()) {
-            int pathLength = Math.abs(toX - fromX);
+        if (!movement.isHorizontalMovement()) {
+            return new PathResult(null);
+        }
 
-            if (horizontalLimit == 0 || (toX > fromX && pathLength <= horizontalLimit) || (toX < fromX && pathLength <= horizontalLimit)) {
-                Position[] path = generateHorizontalPath(fromY, fromX, toX);
-                return new PathResult(path);
-            }
+        int pathLength = Math.abs(toX - fromX);
+
+        if (isWithinHorizontalLimit(toX, fromX, pathLength)) {
+            Position[] path = generateHorizontalPath(fromY, fromX, toX);
+            return new PathResult(path);
         }
 
         return new PathResult(null);
+    }
+
+    private boolean isWithinHorizontalLimit(int toX, int fromX, int pathLength) {
+        return horizontalLimit == 0 || (toX > fromX && pathLength <= horizontalLimit) || (toX < fromX && pathLength <= horizontalLimit);
     }
 
     private Position[] generateHorizontalPath(int y, int fromX, int toX) {

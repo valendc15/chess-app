@@ -1,18 +1,20 @@
 package org.austral.game.commons;
 
 import edu.austral.dissis.chess.gui.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Stack;
 
 public class CustomGameEngine implements GameEngine {
     private Game game;
-    private Stack<Game> previousGames = new Stack<>();
+    private final Stack<Game> previousGames = new Stack<>();
     public CustomGameEngine(GameCreator gameCreator){
         this.game= gameCreator.createGame();
         previousGames.push(game);
     }
 
-    public MoveResult applyMove(Move movement){
+    @NotNull
+    public MoveResult applyMove(@NotNull Move movement){
         Game previousGame=previousGames.peek();
         Game currentGame=previousGame.move(Adapter.convertMove(movement));
         if(previousGame.getBoard()==currentGame.getBoard()){
@@ -25,6 +27,7 @@ public class CustomGameEngine implements GameEngine {
         return new NewGameState(Adapter.getAllPieces(currentGame.getBoard()),Adapter.convertPlayerColor(currentGame.getCurrentPlayer().getColor()));
     }
 
+    @NotNull
     public InitialState init() {
         return createInitialState();
     }

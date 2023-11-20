@@ -7,9 +7,8 @@ import org.austral.game.commons.Validator;
 
 public class NotEatingValidator implements Validator {
     public boolean validate(Movement movement, Board board, Player player) {
-        if(board.getSquares(movement.getTo()).hasPiece()){
-            return false;
-        }
-        return true;
+        return !board.getSquares(movement.getTo()).hasPiece();
     }
+
+
 }
