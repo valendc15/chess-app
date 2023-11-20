@@ -14,14 +14,19 @@ public class Game implements org.austral.game.commons.Game {
     private TurnManager turnManager;
     private boolean isOver;
 
-    public Game(Board board, Piece[] pieces, Validator movementRules, WinningRules[] winingRules){
+    public Game(Board board, Piece[] pieces, Validator movementRules, WinningRules[] winingRules, Color firstPlayerColor){
         whitePlayer = new Player(Color.WHITE);
         blackPlayer = new Player(Color.BLACK);
         isOver = false;
         this.movementManager=new MovementManager(movementRules);
         this.board=initializeBoardWithPieces(pieces, board);
         this.winingRules=winingRules;
-        this.turnManager=new TurnManager(whitePlayer);
+        if(firstPlayerColor==Color.BLACK){
+            turnManager=new TurnManager(blackPlayer);
+        }
+        else{
+            turnManager=new TurnManager(whitePlayer);
+        }
     }
 
     public Player getCurrentPlayer(){

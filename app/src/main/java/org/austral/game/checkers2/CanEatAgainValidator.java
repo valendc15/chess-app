@@ -31,6 +31,6 @@ public class CanEatAgainValidator implements Validator {
             }
         }
 
-        return false; // No valid moves found
+        return false;
     }
 }

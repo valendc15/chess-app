@@ -1,4 +1,4 @@
-package org.austral.game.checkers2;
+package org.austral.game.commons;
 
 import org.austral.game.commons.Board;
 import org.austral.game.commons.Color;
@@ -10,6 +10,7 @@ public class AllPiecesEaten implements WinningRules {
     @Override
     public boolean validateRule(Board board, Player player) {
         Color opposingColor=player.getColor() == Color.WHITE ? Color.BLACK : Color.WHITE;
-        return board.getPieces(opposingColor).isEmpty();
+        boolean allPiecesEaten = board.getPieces(opposingColor).isEmpty();
+        return allPiecesEaten;
     }
 }

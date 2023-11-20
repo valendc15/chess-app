@@ -1,40 +1,49 @@
 package org.austral.game.chess;
 
+import org.austral.game.commons.*;
+
 import java.util.Optional;
-import org.austral.game.commons.Board;
-import org.austral.game.commons.Movement;
-import org.austral.game.commons.Player;
-import org.austral.game.commons.Piece;
-import org.austral.game.commons.HorizontalPathGenerator;
 
 public class CastlingManager {
+
     public static Board applyCastling(Board board, Movement movement, Player player) {
         if (isCastling(movement, board, player)) {
-            Optional<MovementValidatorWithCollision> movementValidatorOptional = Optional.of(new MovementValidatorWithCollision(new HorizontalPathGenerator(0)));
-            if (movementValidatorOptional.isPresent() && !movementValidatorOptional.get().validate(movement, board, player)) {
+            if (!validateCastling(movement, board, player)) {
                 return board;
             }
 
-            Optional<Piece> kingOptional= board.getPiece(movement.getFrom()).getSuccesValue();
-            Optional<Piece> rookOptional= board.getPiece(movement.getTo()).getSuccesValue();
-
-            if (kingOptional.isPresent() && rookOptional.isPresent()) {
-                Piece king = kingOptional.get();
-                Piece rook = rookOptional.get();
-
-                Board castlingResult = board
-                        .removePiece(movement.getFrom())
-                        .removePiece(movement.getTo())
-                        .placePiece(king, movement.getTo())
-                        .placePiece(rook, movement.getFrom());
-
-                if (!board.isCheck(king.getColor())) {
-                    return castlingResult;
-                }
+            Board castlingResult = performCastling(board, movement);
+            if (!board.isCheck(player.getColor())) {
+                return castlingResult;
             }
         }
         return board;
     }
+
+    private static boolean validateCastling(Movement movement, Board board, Player player) {
+        MovementValidatorWithCollision movementValidator = new MovementValidatorWithCollision(new HorizontalPathGenerator(0));
+        return movementValidator.validate(movement, board, player);
+    }
+
+    private static Board performCastling(Board board, Movement movement) {
+        Optional<Piece> kingOptional = board.getPiece(movement.getFrom()).getSuccesValue();
+        Optional<Piece> rookOptional = board.getPiece(movement.getTo()).getSuccesValue();
+
+        if (kingOptional.isPresent() && rookOptional.isPresent()) {
+
+            int direction = (movement.getFrom().getPositionX() < movement.getTo().getPositionX()) ? 1 : -1;
+
+            Position kingNewPos = new Position(movement.getFrom().getPositionX() + 2 * direction, movement.getFrom().getPositionY());
+            Position rookNewPos = new Position(movement.getFrom().getPositionX() + direction, movement.getFrom().getPositionY());
+
+            Board castlingResult = board.movePiece(new Movement(movement.getFrom(), kingNewPos));
+            castlingResult = castlingResult.movePiece(new Movement(movement.getTo(), rookNewPos));
+
+            return castlingResult;
+        }
+        return board;
+    }
+
 
     public static boolean isCastling(Movement movement, Board board, Player player) {
         Optional<Piece> fromPieceOptional = board.getPiece(movement.getFrom()).getSuccesValue();
@@ -44,18 +53,14 @@ public class CastlingManager {
             Piece fromPiece = fromPieceOptional.get();
             Piece toPiece = toPieceOptional.get();
 
-            if (fromPiece.getPieceName().equals("king") && toPiece.getPieceName().equals("rook")
-                    && fromPiece.isFirstMove() && toPiece.isFirstMove()
-                    && fromPiece.getColor() == player.getColor() && toPiece.getColor() == player.getColor()) {
-                return true;
-            }
-
-            if (fromPiece.getPieceName().equals("rook") && toPiece.getPieceName().equals("king")
-                    && fromPiece.isFirstMove() && toPiece.isFirstMove()
-                    && fromPiece.getColor() == player.getColor() && toPiece.getColor() == player.getColor()) {
-                return true;
-            }
+            return (castlingConditions(fromPiece, toPiece, player));
         }
         return false;
+    }
+
+    private static boolean castlingConditions(Piece fromPiece, Piece toPiece, Player player) {
+        return (fromPiece.getPieceName().equals("king") && toPiece.getPieceName().equals("rook"))
+                && fromPiece.isFirstMove() && toPiece.isFirstMove()
+                && fromPiece.getColor() == player.getColor() && toPiece.getColor() == player.getColor();
     }
 }

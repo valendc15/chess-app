@@ -26,21 +26,46 @@ public class CheckMate implements WinningRules {
             return true;
         }
 
-        List<Piece> pieces=board.getPieces(color);
+        return pieceCanSave(board, color);
+}
+
+    private boolean pieceCanSave(Board board, Color color) {
+        List<Piece> pieces = board.getPieces(color);
+
         for (Piece piece : pieces) {
-            if(!board.findPiece(piece).getErrorValue()) {
-                Movement[] possibleMoves = possibleMovesCalculator.calculatePossibleMoves(board, board.findPiece(piece).getSuccesValue().get());
-                for (Movement move : possibleMoves) {
-                    Board updatedBoard = board.movePiece(move);
-                    if (!updatedBoard.isCheck(color)) {
-                        return false;
-                    }
-                }
+            if (pieceValidAndMoveCanSave(board, color, piece)) {
+                return false;
             }
         }
 
         return true;
-}}
+    }
+
+    private boolean pieceValidAndMoveCanSave(Board board, Color color, Piece piece) {
+        return isPieceValid(board, piece) && isAnyMoveCanSave(board, color, piece);
+    }
+
+    private boolean isPieceValid(Board board, Piece piece) {
+        return !board.findPiece(piece).getErrorValue();
+    }
+
+    private Movement[] calculatePossibleMoves(Board board, Piece piece) {
+        return possibleMovesCalculator.calculatePossibleMoves(board, board.findPiece(piece).getSuccesValue().get());
+    }
+
+    private boolean isAnyMoveCanSave(Board board, Color color, Piece piece) {
+        Movement[] possibleMoves = calculatePossibleMoves(board, piece);
+
+        for (Movement move : possibleMoves) {
+            Board updatedBoard = board.movePiece(move);
+            if (!updatedBoard.isCheck(color)) {
+                return true;
+            }
+        }
+
+        return false;
+    }}
+
 
 
 

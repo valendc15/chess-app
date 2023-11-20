@@ -10,6 +10,7 @@ import javafx.scene.Scene
 import javafx.stage.Stage
 import org.austral.game.checkers2.CheckersGameFactory
 import org.austral.game.chess.ChessGameFactory
+import org.austral.game.chess.DunsanysChessGameFactory
 import org.austral.game.commons.CustomGameEngine
 import org.austral.game.connection.ServerController
 
@@ -19,7 +20,7 @@ fun main() {
 }
 
 class ChessGameApplication : Application() {
-    private val gameEngine = CustomGameEngine(CheckersGameFactory());
+    private val gameEngine = CustomGameEngine(ChessGameFactory())
     private val imageResolver = CachedImageResolver(DefaultImageResolver())
     private val root = GameView(imageResolver)
     private val server = NettyServerBuilder.createDefault()

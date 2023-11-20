@@ -5,10 +5,12 @@ import org.austral.game.commons.*;
 
 public class ChessMovementFactory {
 
+    public static InitialMovementValidator initialMovementValidator = new InitialMovementValidator();
+    public static EatingValidator eatingValidator = new EatingValidator();
+
+    public static  NotEatingValidator notEatingValidator = new NotEatingValidator();
+
     public static CompositeOrValidator createWhitePawnMovements(){
-        InitialMovementValidator initialMovementValidator=new InitialMovementValidator();
-        EatingValidator eatingValidator=new EatingValidator();
-        NotEatingValidator notEatingValidator=new NotEatingValidator();
         VerticalPathGenerator verticalPathGeneratorpawn = new VerticalPathGenerator(1, true, false);
         VerticalPathGenerator verticalDoblePathGenerator= new VerticalPathGenerator(2,true,false);
         DiagonalPathGenerator diagonalPathGeneratorPawn = new DiagonalPathGenerator(1, true, false);
@@ -18,15 +20,11 @@ public class ChessMovementFactory {
         CompositeAndValidator initialMovementPawn=new CompositeAndValidator(movementValidatorWithCollisionPawn,notEatingValidator);
         CompositeAndValidator initialMovementPawnDoble=new CompositeAndValidator(initialMovementValidator,movementValidatorWithCollisionPawnDoble,notEatingValidator);
         CompositeAndValidator eatingMovementPawn=new CompositeAndValidator(movementValidatorWithCollisionPawnDiagonal,eatingValidator);
-        CompositeOrValidator pawnMovements=new CompositeOrValidator(initialMovementPawn,initialMovementPawnDoble,eatingMovementPawn);
-        return pawnMovements;
+        return new CompositeOrValidator(initialMovementPawn,initialMovementPawnDoble,eatingMovementPawn);
     }
 
 
     public static CompositeOrValidator createBlackPawnMovements(){
-        InitialMovementValidator initialMovementValidator=new InitialMovementValidator();
-        EatingValidator eatingValidator=new EatingValidator();
-        NotEatingValidator notEatingValidator=new NotEatingValidator();
         VerticalPathGenerator verticalPathGeneratorpawn = new VerticalPathGenerator(1, false, true);
         VerticalPathGenerator verticalDoblePathGenerator= new VerticalPathGenerator(2,false,true);
         DiagonalPathGenerator diagonalPathGeneratorPawn = new DiagonalPathGenerator(1, false, true);
@@ -36,14 +34,10 @@ public class ChessMovementFactory {
         CompositeAndValidator initialMovementPawn=new CompositeAndValidator(movementValidatorWithCollisionPawn,notEatingValidator);
         CompositeAndValidator initialMovementPawnDoble=new CompositeAndValidator(initialMovementValidator,movementValidatorWithCollisionPawnDoble,notEatingValidator);
         CompositeAndValidator eatingMovementPawn=new CompositeAndValidator(movementValidatorWithCollisionPawnDiagonal,eatingValidator);
-        CompositeOrValidator pawnMovements=new CompositeOrValidator(initialMovementPawn,initialMovementPawnDoble,eatingMovementPawn);
-        return pawnMovements;
+        return new CompositeOrValidator(initialMovementPawn,initialMovementPawnDoble,eatingMovementPawn);
     }
 
     public static CompositeOrValidator createRookMovements(){
-        InitialMovementValidator initialMovementValidator = new InitialMovementValidator();
-        EatingValidator eatingValidator=new EatingValidator();
-        NotEatingValidator notEatingValidator=new NotEatingValidator();
         HorizontalPathGenerator horizontalPathGenerator = new HorizontalPathGenerator(0);
         VerticalPathGenerator verticalPathGenerator = new VerticalPathGenerator(0, true, true);
         MovementValidatorWithCollision movementValidatorWithCollisionRookHorizontal=new MovementValidatorWithCollision(horizontalPathGenerator);
@@ -52,8 +46,7 @@ public class ChessMovementFactory {
         CompositeAndValidator eatingMovementRookVertical=new CompositeAndValidator(movementValidatorWithCollisionRookVertical,eatingValidator);
         CompositeAndValidator notEatingMovementRookHorizontal=new CompositeAndValidator(movementValidatorWithCollisionRookHorizontal,notEatingValidator);
         CompositeAndValidator notEatingMovementRookVertical=new CompositeAndValidator(movementValidatorWithCollisionRookVertical,notEatingValidator);
-        CompositeOrValidator rookMovements=new CompositeOrValidator(eatingMovementRookHorizontal,notEatingMovementRookHorizontal,eatingMovementRookVertical,notEatingMovementRookVertical);
-        return rookMovements;
+        return new CompositeOrValidator(eatingMovementRookHorizontal,notEatingMovementRookHorizontal,eatingMovementRookVertical,notEatingMovementRookVertical);
     }
     public static CompositeOrValidator createBishopMovements(){
         EatingValidator eatingValidator=new EatingValidator();
@@ -62,8 +55,7 @@ public class ChessMovementFactory {
         MovementValidatorWithCollision movementValidatorWithCollisionBishop=new MovementValidatorWithCollision(diagonalPathGenerator);
         CompositeAndValidator eatingMovementBishop=new CompositeAndValidator(movementValidatorWithCollisionBishop,eatingValidator);
         CompositeAndValidator notEatingMovementBishop=new CompositeAndValidator(movementValidatorWithCollisionBishop,notEatingValidator);
-        CompositeOrValidator bishopMovements=new CompositeOrValidator(eatingMovementBishop,notEatingMovementBishop);
-        return bishopMovements;
+        return new CompositeOrValidator(eatingMovementBishop,notEatingMovementBishop);
     }
 
     public static CompositeOrValidator createKnightMovements(){
@@ -73,13 +65,10 @@ public class ChessMovementFactory {
         MovementValidatorWithCollision movementValidatorWithCollisionKnight=new MovementValidatorWithCollision(knightPathGenerator);
         CompositeAndValidator eatingMovementKnight=new CompositeAndValidator(movementValidatorWithCollisionKnight,eatingValidator);
         CompositeAndValidator notEatingMovementKnight=new CompositeAndValidator(movementValidatorWithCollisionKnight,notEatingValidator);
-        CompositeOrValidator knightMovements=new CompositeOrValidator(eatingMovementKnight,notEatingMovementKnight);
-        return knightMovements;
+        return new CompositeOrValidator(eatingMovementKnight,notEatingMovementKnight);
     }
 
     public static CompositeOrValidator createQueenMovements(){
-        EatingValidator eatingValidator=new EatingValidator();
-        NotEatingValidator notEatingValidator=new NotEatingValidator();
         DiagonalPathGenerator diagonalPathGeneratorQueen = new DiagonalPathGenerator(0, true, true);
         HorizontalPathGenerator horizontalPathGeneratorQueen = new HorizontalPathGenerator(0);
         VerticalPathGenerator verticalPathGeneratorQueen = new VerticalPathGenerator(0, true, true);
@@ -92,13 +81,10 @@ public class ChessMovementFactory {
         CompositeAndValidator notEatingMovementQueen=new CompositeAndValidator(movementValidatorWithCollisionQueen,notEatingValidator);
         CompositeAndValidator notEatingMovementQueenHorizontal=new CompositeAndValidator(movementValidatorWithCollisionQueenHorizontal,notEatingValidator);
         CompositeAndValidator notEatingMovementQueenVertical=new CompositeAndValidator(movementValidatorWithCollisionQueenVertical,notEatingValidator);
-        CompositeOrValidator queenMovements=new CompositeOrValidator(eatingMovementQueen,notEatingMovementQueen,eatingMovementQueenHorizontal,notEatingMovementQueenHorizontal,eatingMovementQueenVertical,notEatingMovementQueenVertical);
-        return queenMovements;
+        return new CompositeOrValidator(eatingMovementQueen,notEatingMovementQueen,eatingMovementQueenHorizontal,notEatingMovementQueenHorizontal,eatingMovementQueenVertical,notEatingMovementQueenVertical);
     }
 
     public static CompositeOrValidator createKingMovements(){
-        EatingValidator eatingValidator=new EatingValidator();
-        NotEatingValidator notEatingValidator=new NotEatingValidator();
         DiagonalPathGenerator diagonalPathGeneratorKing = new DiagonalPathGenerator(1, true, true);
         HorizontalPathGenerator horizontalPathGeneratorKing = new HorizontalPathGenerator(1);
         VerticalPathGenerator verticalPathGeneratorKing = new VerticalPathGenerator(1, true, true);
@@ -111,13 +97,10 @@ public class ChessMovementFactory {
         CompositeAndValidator notEatingMovementKing=new CompositeAndValidator(movementValidatorWithCollisionKing,notEatingValidator);
         CompositeAndValidator notEatingMovementKingHorizontal=new CompositeAndValidator(movementValidatorWithCollisionKingHorizontal,notEatingValidator);
         CompositeAndValidator notEatingMovementKingVertical=new CompositeAndValidator(movementValidatorWithCollisionKingVertical,notEatingValidator);
-        CompositeOrValidator kingMovements=new CompositeOrValidator(eatingMovementKing,notEatingMovementKing,eatingMovementKingHorizontal,notEatingMovementKingHorizontal,eatingMovementKingVertical,notEatingMovementKingVertical);
-        return kingMovements;
+        return new CompositeOrValidator(eatingMovementKing,notEatingMovementKing,eatingMovementKingHorizontal,notEatingMovementKingHorizontal,eatingMovementKingVertical,notEatingMovementKingVertical);
     }
 
     public static CompositeOrValidator queenWithoutCollision(){
-        EatingValidator eatingValidator= new EatingValidator();
-        NotEatingValidator notEatingValidator = new NotEatingValidator();
         DiagonalPathGenerator diagonalPathGeneratorQueen = new DiagonalPathGenerator(0, true, true);
         HorizontalPathGenerator horizontalPathGeneratorQueen = new HorizontalPathGenerator(0);
         VerticalPathGenerator verticalPathGeneratorQueen = new VerticalPathGenerator(0, true, true);
@@ -130,9 +113,17 @@ public class ChessMovementFactory {
         CompositeAndValidator notEatingMovementQueen=new CompositeAndValidator(diagonalWithoutCollistion,notEatingValidator);
         CompositeAndValidator notEatingMovementQueenHorizontal=new CompositeAndValidator(horizontalWithoutCollisio,notEatingValidator);
         CompositeAndValidator notEatingMovementQueenVertical=new CompositeAndValidator(verticalWithoutCollisio,notEatingValidator);
-        CompositeOrValidator queenMovements=new CompositeOrValidator(eatingMovementQueen,notEatingMovementQueen,eatingMovementQueenHorizontal,notEatingMovementQueenHorizontal,eatingMovementQueenVertical,notEatingMovementQueenVertical);
-        return queenMovements;
+        return new CompositeOrValidator(eatingMovementQueen,notEatingMovementQueen,eatingMovementQueenHorizontal,notEatingMovementQueenHorizontal,eatingMovementQueenVertical,notEatingMovementQueenVertical);
+    }
 
+    public static  CompositeOrValidator creatWhitePawnWithoutDouble(){
+        VerticalPathGenerator verticalPathGeneratorpawn = new VerticalPathGenerator(1, true, false);
+        DiagonalPathGenerator diagonalPathGeneratorPawn = new DiagonalPathGenerator(1, true, false);
+        MovementValidatorWithoutCollision movementValidatorWithoutCollisionPawn=new MovementValidatorWithoutCollision(verticalPathGeneratorpawn);
+        MovementValidatorWithoutCollision movementValidatorWithoutCollisionPawnDiagonal=new MovementValidatorWithoutCollision(diagonalPathGeneratorPawn);
+        CompositeAndValidator initialMovementPawn=new CompositeAndValidator(movementValidatorWithoutCollisionPawn,notEatingValidator);
+        CompositeAndValidator eatingMovementPawn=new CompositeAndValidator(movementValidatorWithoutCollisionPawnDiagonal,eatingValidator);
+        return new CompositeOrValidator(initialMovementPawn,eatingMovementPawn);
     }
 
 }

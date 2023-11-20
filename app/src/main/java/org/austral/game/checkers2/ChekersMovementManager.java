@@ -35,10 +35,15 @@ public class ChekersMovementManager {
 
     private Board manageChainMovement(Player player, Board board, Movement movement) {
         if (validateSamePieceasBefore(movement, board) && isValidMove(player, board, movement)) {
-            board = board.movePiece(movement);
-            if (movement.isDiagonalMovementByTwo()) {
+            CheckersEatingValidator checkersEatingValidator = new CheckersEatingValidator();
+            QueenEatingValidator queenEatingValidator = new QueenEatingValidator();
+            if (checkersEatingValidator.validate(movement, board, player)) {
                 board = board.removePiece(movement.getMiddlePositionIfDiagonalByTwo());
             }
+            if (queenEatingValidator.validate(movement, board, player)) {
+                board = board.removePiece(queenEatingValidator.getMiddlePosition(movement));
+            }
+            board = board.movePiece(movement);
         }
         board = PromotionManager.applyPromotion(board,CheckersMovementFactory.createQueenPieceMovements());
         return board;
@@ -46,9 +51,14 @@ public class ChekersMovementManager {
 
     private Board manageNonChainMovement(Player player, Board board, Movement movement) {
         if (isValidMove(player, board, movement)) {
+            boolean checkersEatingValidator= new CheckersEatingValidator().validate(movement, board, player);
+            boolean queenEatingValidator= new QueenEatingValidator().validate(movement, board, player);
             board = board.movePiece(movement);
-            if (movement.isDiagonalMovementByTwo()) {
+            if (checkersEatingValidator) {
                 board = board.removePiece(movement.getMiddlePositionIfDiagonalByTwo());
+            }
+            if (queenEatingValidator) {
+                board = board.removePiece(new QueenEatingValidator().getMiddlePosition(movement));
             }
         }
         board = PromotionManager.applyPromotion(board,CheckersMovementFactory.createQueenPieceMovements());

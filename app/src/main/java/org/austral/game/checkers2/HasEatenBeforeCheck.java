@@ -22,9 +22,10 @@ public class HasEatenBeforeCheck implements Validator {
         Movement lastMovement = movementHistory.getLastMovement();
         Board lastBoard = movementHistory.getLastBoard();
         Validator checkersEatingValidator = new CheckersEatingValidator();
+        Validator QueenEatingValidator = new QueenEatingValidator();
 
         return lastMovement.getTo().equals(movement.getFrom()) &&
-                checkersEatingValidator.validate(lastMovement, lastBoard, player);
+                (checkersEatingValidator.validate(lastMovement, lastBoard, player) || QueenEatingValidator.validate(lastMovement, lastBoard, player));
     }
 }
 

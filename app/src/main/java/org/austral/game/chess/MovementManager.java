@@ -15,8 +15,8 @@ public class MovementManager {
             return CastlingManager.applyCastling(board, movement, player);
         }
         if (isValidMove(player, board, movement)) {
-            board = PromotionManager.applyPromotion(board, ChessMovementFactory.createQueenMovements());
-            return board.movePiece(movement);
+            board= board.movePiece(movement);
+            return PromotionManager.applyPromotion(board, ChessMovementFactory.createQueenMovements());
         } else {
             return board;
         }
